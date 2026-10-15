@@ -1,0 +1,79 @@
+const int EMG_PIN = A0;
+const int OUTPUT_PIN = LED_BUILTIN;
+
+const int SAMPLE_RATE = 1000;
+const int BASELINE_SAMPLES = 1000;
+const int ENVELOPE_WINDOW = 50;
+
+int baseline = 0;
+int envelopeBuffer[ENVELOPE_WINDOW];
+long envelopeSum = 0;
+int bufferIndex = 0;
+
+int threshold = 10;
+
+unsigned long nextSampleTime;
+
+void setup() {
+  Serial.begin(115200);
+
+  analogReadResolution(12);
+  analogReadAveraging(1);
+
+  pinMode(OUTPUT_PIN, OUTPUT);
+
+  delay(1000);
+
+  long sum = 0;
+
+  for (int i = 0; i < BASELINE_SAMPLES; i++) {
+    sum += analogRead(EMG_PIN);
+    delay(1);
+  }
+
+  baseline = sum / BASELINE_SAMPLES;
+
+  for (int i = 0; i < ENVELOPE_WINDOW; i++) {
+    envelopeBuffer[i] = 0;
+  }
+
+  nextSampleTime = micros();
+}
+
+void loop() {
+  unsigned long currentTime = micros();
+
+  if ((long)(currentTime - nextSampleTime) >= 0) {
+    nextSampleTime += 1000000UL / SAMPLE_RATE;
+
+    int rawEMG = analogRead(EMG_PIN);
+
+    int acEMG = rawEMG - baseline;
+
+    int rectifiedEMG = abs(acEMG);
+
+    envelopeSum -= envelopeBuffer[bufferIndex];
+    envelopeBuffer[bufferIndex] = rectifiedEMG;
+    envelopeSum += rectifiedEMG;
+
+    bufferIndex++;
+
+    if (bufferIndex >= ENVELOPE_WINDOW) {
+      bufferIndex = 0;
+    }
+
+    int envelope = envelopeSum / ENVELOPE_WINDOW;
+
+    int logicState = envelope >= threshold ? 1 : 0;
+
+    digitalWrite(OUTPUT_PIN, logicState);
+
+    Serial.print(rawEMG);
+    Serial.print(",");
+    Serial.print(acEMG + 100);
+    Serial.print(",");
+    Serial.print(envelope);
+    Serial.print(",");
+    Serial.println(logicState * 100);
+  }
+}

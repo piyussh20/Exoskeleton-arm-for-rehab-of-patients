@@ -30,7 +30,7 @@ Stroke, sports injuries, and age-related muscle weakness often limit shoulder an
 | Component | Details |
 |---|---|
 | Microcontroller | Teensy 4.1 |
-| Actuators | 2 × 12V DC geared motors (50–60 RPM) |
+| Actuators | 2 × 12V DC geared motors (50RPM) |
 | Gear train | Bevel and Spur gears, 16T / 25T / 50T |
 | IMU | BNO055 (9-axis absolute orientation) |
 | EMG sensors | 2 × (biceps brachii, shoulder/deltoid) |
@@ -63,7 +63,6 @@ EMG sensors (×2) candy module
 DC geared motors (×2) 
 Motor drivers (×2) 
 Gears + hardware 
-Potentiometers (×2)
 Frame / rods / mounts 
 Battery, wiring, enclosure 
 

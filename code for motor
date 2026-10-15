@@ -1,0 +1,69 @@
+ //====================================
+// BTS7960 Motor Test
+// Teensy 4.1
+//====================================
+
+const int RPWM = 4;
+const int LPWM = 5;
+const int REN  = 6;
+const int LEN  = 7;
+
+void setup()
+{
+  Serial.begin(115200);
+
+  pinMode(RPWM, OUTPUT);
+  pinMode(LPWM, OUTPUT);
+
+  pinMode(REN, OUTPUT);
+  pinMode(LEN, OUTPUT);
+
+  // Enable Driver
+  digitalWrite(REN, HIGH);
+  digitalWrite(LEN, HIGH);
+
+  motorStop();
+
+  Serial.println("Motor Test Started");
+}
+
+void loop()
+{
+  Serial.println("STOP");
+  motorStop();
+  delay(3000);
+
+  Serial.println("CLOCKWISE");
+  motorCW();
+  delay(3000);
+
+  Serial.println("STOP");
+  motorStop();
+  delay(3000);
+
+  Serial.println("ANTICLOCKWISE");
+  motorCCW();
+  delay(3000);
+}
+
+//=========================
+// FUNCTIONS
+//=========================
+
+void motorCW()
+{
+  analogWrite(RPWM, 180);
+  analogWrite(LPWM, 0);
+}
+
+void motorCCW()
+{
+  analogWrite(RPWM, 0);
+  analogWrite(LPWM, 180);
+}
+
+void motorStop()
+{
+  analogWrite(RPWM, 0);
+  analogWrite(LPWM, 0);
+}

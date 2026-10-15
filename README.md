@@ -81,6 +81,7 @@ This is a research prototype and **not a certified medical device**. It should n
 - Pilot trials with physiotherapy patients, injured athletes, and elderly users
 - Weight reduction 
 ## Authors
-
-
-Add team members and institution here.
+Raviraj Surve
+Abhishek Nair
+Piyush Vaidya
+Gargee Phansekar
